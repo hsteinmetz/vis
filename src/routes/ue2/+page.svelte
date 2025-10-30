@@ -2,6 +2,13 @@
 	import data from './Uebung02_Daten.json';
 	import * as d3 from 'd3';
 
+	type DataPoint = {
+		Jahr: number;
+		Stadt: string;
+		'Anzahl Kebabläden': number;
+	};
+	const typedData: DataPoint[] = data;
+
 	const width = 800;
 	const height = 600;
 	const marginTop = 50;
@@ -11,7 +18,7 @@
 
 	let x = d3
 		.scaleBand()
-		.domain(data.map((d) => d.Jahr))
+		.domain(typedData.map((d) => d.Jahr.toString()))
 		.range([marginLeft, width - marginRight]);
 	let y = d3
 		.scaleLinear()
@@ -22,13 +29,8 @@
 	let gy: SVGGElement;
 
 	let line = d3.line(
-		(d) => x(d.Jahr)! + x.bandwidth() / 2,
-		(d) => y(d['Anzahl Kebabläden'])
-	);
-
-	let gridLine = d3.line(
-		(d) => x(d),
-		(d) => y(d)
+		(d: DataPoint) => x(d.Jahr.toString())! + x.bandwidth() / 2,
+		(d: DataPoint) => y(d['Anzahl Kebabläden'])
 	);
 
 	let data_koeln = $derived(data.filter((d) => d.Stadt === 'Köln'));
