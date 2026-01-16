@@ -203,16 +203,12 @@
 
 <div
 	id="container"
-	style={`margin-left: ${margin.left}px; margin-right: ${margin.right}px; width: ${width}px;`}
+	style={`margin-left: ${margin.left}px; margin-right: ${margin.right}px; width: ${width + 200}px;`}
 >
 	<div class="filter-controls">
 		<label for="courseSelect">
 			Course:
-			<select
-				name="courseSelect"
-				id="courseSelect"
-				bind:value={filterState.selectedCourse}
-			>
+			<select name="courseSelect" id="courseSelect" bind:value={filterState.selectedCourse}>
 				<option value="ALL">All Courses</option>
 				{#each Array.from(new Set(mappedData.map((d) => d.course))).sort() as course}
 					<option value={course}>
@@ -362,11 +358,13 @@
 		gap: 20px;
 		margin-bottom: 20px;
 		margin-top: 20px;
+		margin-left: 60px;
 	}
 
 	.error-container {
 		color: red;
 		margin-bottom: 10px;
+		margin-left: 60px;
 		background-color: #ffe6e6;
 		padding: 10px;
 		border: 1px solid red;
