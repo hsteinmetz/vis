@@ -31,8 +31,8 @@
 	const filterState = $state({
 		selectedCourse: 'ALL',
 		resitValue: 'ALL',
-		yearMin: 2000,
-		yearMax: 2024
+		yearMin: 2021,
+		yearMax: 2025
 	});
 
 	function mapData(data: RawDataPoint[]): DataPoint[] {
@@ -65,6 +65,8 @@
 			return courseMatch && resitMatch && yearMatch;
 		});
 	});
+	const isError = $derived(() => filterState.yearMin > filterState.yearMax);
+
 	const tiles = $derived(() => {
 		const tileMap = new Map<string, DataPoint[]>();
 		for (const d of filteredData()) {
@@ -199,21 +201,21 @@
 	};
 </script>
 
-<div id="container">
-	<div
-		class="filter-controls"
-		style={`margin-left: ${margin.left}px; margin-right: ${margin.right}px;`}
-	>
+<div
+	id="container"
+	style={`margin-left: ${margin.left}px; margin-right: ${margin.right}px; width: ${width}px;`}
+>
+	<div class="filter-controls">
 		<label for="courseSelect">
 			Course:
 			<select
 				name="courseSelect"
 				id="courseSelect"
-				onchange={(e) => (filterState.selectedCourse = (e.target as HTMLSelectElement).value)}
+				bind:value={filterState.selectedCourse}
 			>
-				<option value="ALL" selected={filterState.selectedCourse === 'ALL'}>All Courses</option>
+				<option value="ALL">All Courses</option>
 				{#each Array.from(new Set(mappedData.map((d) => d.course))).sort() as course}
-					<option value={course} selected={course === filterState.selectedCourse}>
+					<option value={course}>
 						{course}
 					</option>
 				{/each}
@@ -221,48 +223,47 @@
 		</label>
 		<label for="resitSelect">
 			Resit:
-			<select
-				name="resitSelect"
-				id="resitSelect"
-				onchange={(e) => (filterState.resitValue = (e.target as HTMLSelectElement).value)}
-			>
-				<option value="ALL" selected={filterState.resitValue === 'ALL'}>All</option>
-				<option value="NO" selected={filterState.resitValue === 'NO'}>No Resit</option>
-				<option value="YES" selected={filterState.resitValue === 'YES'}>Resit Only</option>
+			<select name="resitSelect" id="resitSelect" bind:value={filterState.resitValue}>
+				<option value="ALL">All</option>
+				<option value="NO">No Resit</option>
+				<option value="YES">Resit Only</option>
 			</select>
 		</label>
 		<label for="yearMinSelect">
 			Year Min:
-			<select
-				name="yearMinSelect"
-				id="yearMinSelect"
-				onchange={(e) => (filterState.yearMin = parseInt((e.target as HTMLSelectElement).value))}
-			>
+			<select name="yearMinSelect" id="yearMinSelect" bind:value={filterState.yearMin}>
 				{#each Array.from(new Set(mappedData.map((d) => d.year))).sort((a, b) => a - b) as year}
-					<option value={year} selected={year === filterState.yearMin}>{year}</option>
+					<option value={year}>{year}</option>
 				{/each}
 			</select>
 		</label>
 		<label for="yearMaxSelect">
 			Year Max:
-			<select
-				name="yearMaxSelect"
-				id="yearMaxSelect"
-				onchange={(e) => (filterState.yearMax = parseInt((e.target as HTMLSelectElement).value))}
-			>
+			<select name="yearMaxSelect" id="yearMaxSelect" bind:value={filterState.yearMax}>
 				{#each Array.from(new Set(mappedData.map((d) => d.year))).sort((a, b) => a - b) as year}
-					<option value={year} selected={year === filterState.yearMax}>{year}</option>
+					<option value={year}>{year}</option>
 				{/each}
 			</select>
 		</label>
 		<button onclick={clearFilters}>Clear</button>
 	</div>
 
+	{#if isError()}
+		<div class="error-container">
+			{#if filteredData().length === 0}
+				No data available for the selected filters.
+			{/if}
+			{#if filterState.yearMin > filterState.yearMax}
+				Warning: Year Min is greater than Year Max.
+			{/if}
+		</div>
+	{/if}
+
 	<svg width={width + margin.left + margin.right} height={height + margin.top + margin.bottom}>
 		<g transform={`translate(${margin.left}, ${margin.top})`}>
 			{#each tiles() as tile}
 				{#if tile.count === 0}
-					<!-- draw black rect -->
+					<!-- draw gray rect -->
 					<rect
 						x={x(String(tile.x))}
 						y={y(String(tile.y))}
@@ -361,5 +362,15 @@
 		gap: 20px;
 		margin-bottom: 20px;
 		margin-top: 20px;
+	}
+
+	.error-container {
+		color: red;
+		margin-bottom: 10px;
+		background-color: #ffe6e6;
+		padding: 10px;
+		border: 1px solid red;
+		border-radius: 5px;
+		width: 100%;
 	}
 </style>
