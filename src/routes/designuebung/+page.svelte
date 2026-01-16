@@ -1,3 +1,4 @@
+<!-- CITATION: This is based on this example: https://d3-graph-gallery.com/graph/heatmap_style.html -->
 <script lang="ts">
 	import data from './data.json';
 	import * as d3 from 'd3';
@@ -203,7 +204,7 @@
 
 <div
 	id="container"
-	style={`margin-left: ${margin.left}px; margin-right: ${margin.right}px; width: ${width + 200}px;`}
+	style={`margin-left: ${margin.left}px; margin-right: ${margin.right}px; width: ${width + 100}px;`}
 >
 	<div class="filter-controls">
 		<label for="courseSelect">
