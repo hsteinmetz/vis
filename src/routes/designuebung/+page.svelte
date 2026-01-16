@@ -177,7 +177,6 @@
 		tooltip.style = `position: absolute; left: ${event.pageX + 10}px; top: ${event.pageY + 10}px; background: white; border: 1px solid black; padding: 8px; border-radius: 4px; pointer-events: none;`;
 		tooltip.innerHTML = `
 			<strong>Average Grade:</strong> ${d.grade.toFixed(2)}<br/>
-			<strong>Average Time to Complete:</strong> ${d.timeToComplete} minutes<br/>
 			<strong>Count of Students:</strong> ${
 				filteredData().filter(
 					(dp) =>
@@ -293,9 +292,12 @@
 								degree: '',
 								study: ''
 							})}
+						onfocus={() => 0}
 						onmousemove={handleMouseMove}
 						onmouseout={handleMouseOut}
 						onblur={handleMouseOut}
+						role="button"
+						tabindex="0"
 					/>
 				{/if}
 			{/each}
@@ -319,7 +321,7 @@
 			font-size="14"
 			fill="gray"
 		>
-			Average Grade represented by Color Scale, Lighter = Better average Grade, Gray = No Data
+			Average Grade represented by Color Scale, Lighter = Better, Gray = No Data
 		</text>
 	</svg>
 	<div>
