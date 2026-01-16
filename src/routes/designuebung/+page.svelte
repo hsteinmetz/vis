@@ -179,7 +179,7 @@
 			<strong>Average Grade:</strong> ${d.grade.toFixed(2)}<br/>
 			<strong>Average Time to Complete:</strong> ${d.timeToComplete} minutes<br/>
 			<strong>Count of Students:</strong> ${
-				mappedData.filter(
+				filteredData().filter(
 					(dp) =>
 						binMinutes(dp.timeToComplete, 10) === binMinutes(d.timeToComplete, 10) &&
 						dp.attemptNumber === d.attemptNumber
