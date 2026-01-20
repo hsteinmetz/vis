@@ -149,7 +149,7 @@
 				.call(
 					d3
 						.axisBottom(x)
-						.tickFormat((d) => `${d} min`)
+						.tickFormat((d) => `${parseInt(d)-10} - ${d} min`)
 						.tickSize(0)
 				)
 				.select('.domain')
